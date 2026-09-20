@@ -1,3 +1,8 @@
+import numpy as np
+import math
+import random
+import pandas as pd
+from numpy import linalg as LA
 def wbo(fun, dim, lb, ub, Max_iter, pop=30):
     lb = np.array([lb] * dim) if isinstance(lb, (int, float)) else np.array(lb)
     ub = np.array([ub] * dim) if isinstance(ub, (int, float)) else np.array(ub)
