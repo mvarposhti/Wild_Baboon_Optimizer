@@ -3,6 +3,24 @@ import math
 import random
 import pandas as pd
 from numpy import linalg as LA
+def levy(d):
+    beta = 1.5
+    sigma = (math.gamma(1+beta) * math.sin(math.pi*beta/2) /
+             (math.gamma((1+beta)/2)*beta*2**((beta-1)/2)))**(1/beta)
+
+    u = np.random.normal(0, sigma, d)
+    v = np.random.normal(0, 1, d)
+
+    step = u / (np.abs(v)**(1/beta))
+    return step
+
+def cosine_similarity(x, y):
+
+    if np.linalg.norm(x) == 0 or np.linalg.norm(y) == 0:
+        return 0
+    else:
+        return np.dot(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))
+        
 def wbo(fun, dim, lb, ub, Max_iter, pop=30):
     lb = np.array([lb] * dim) if isinstance(lb, (int, float)) else np.array(lb)
     ub = np.array([ub] * dim) if isinstance(ub, (int, float)) else np.array(ub)
@@ -24,7 +42,7 @@ def wbo(fun, dim, lb, ub, Max_iter, pop=30):
             Z1 = gbest.copy()
             Z2 = X[i,:].copy()
             E = c1 * (2 *np.random.random()-1) * (1 - t/Max_iter) 
-            rl = c2 * levy1(dim)
+            rl = c2 * levy(dim)
             similarity = cosine_similarity(Z1,Z2)
             if similarity >0:
                 Z = (Z1 + Z2)/2
